@@ -12,7 +12,7 @@ const char* cipher_process(){
 	char vowelsym[8] ={'a','e','I','o','U','y','%',';'};
 	char cipherchars[22] ={'+','|','g','&','(','#','~',':','a','3', 't', 'b', '4','X','_','1','2', '*'};
 	// specifying test as static so the compiler can free memory knowing it will only be used in this function 
-	static char pw_string[30] = "Password Generated: ";
+	static char pw_string[25] = "";
 	srand(time(0));
 	printf("\nChoose a length for the password:\n1:Short\n2:Medium\n3:Long\n");
 	pw_length_temp = getchar();
@@ -51,22 +51,24 @@ const char* cipher_process(){
 
 void save_pw(const char* password){
 	FILE *file_write;
-	char* text_file;
+	char text_file[50] = "";
+        char saved_pw[25] = "";
+	strcat(saved_pw, password);
+	strcat(saved_pw, "\n");
 	printf("Enter a name for a text file to save your password to.\nYou can also type a full path to save to a specific directory.\nExample: '/home/your_user/Documents/your_file.txt' or simply 'your_file.txt'\n");
 	scanf("%s", text_file);
 	file_write = fopen(text_file, "w");
-	fprintf(file_write, "%s", password);
+	fwrite(saved_pw, 1,sizeof(saved_pw), file_write);
 	fclose(file_write);
 	printf("\n%s written to successfully\n", text_file);
-	
-
 }
 
 int main(){
 	printf("Hello and welcome to RandomCipher: The C Version\nThis program is designed for Linux/Unix-Like OSes\nIt is designed to randomly generate and save secure passwords.\n\n");
 	//password string is constant, it can't be changed after running the cipher process
 	const char* password = cipher_process();
-	printf("%s\n", password);
+	printf("Password Generated: %s\n", password);
 	save_pw(password);
 	return 0;
 }
+
